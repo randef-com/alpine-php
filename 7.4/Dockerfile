@@ -1,14 +1,18 @@
 FROM alpine:3.10 as main
 
-LABEL maintainer="Jorge Arco <jorge.arcoma@gmail.com>"
+LABEL maintainer="Ondrej Cermak <ondrej.cermak@randef.com>"
 
 ADD https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
 
-RUN apk --update add ca-certificates \
+ENV COMPOSER_VERSION=1.9.3 \
+    S6_VERSION=1.22.1.0 \
+    PROJECT_ROOT='/var/www'
+
+RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz | tar xzf - -C / \
+    && apk --update add ca-certificates \
     && echo "@cast https://dl.bintray.com/php-alpine/v3.10/php-7.4" >> /etc/apk/repositories \
     && apk add -U \
     # Packages
-    tini \
     php7@cast \
     php7-amqp@cast \
     php7-dev@cast \
@@ -53,7 +57,7 @@ ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 ADD rootfs /
 
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/init"]
 
 CMD ["/usr/sbin/php-fpm7", "-R", "--nodaemonize"]
 
@@ -66,14 +70,13 @@ FROM main as dev
 ARG USER=root
 ARG PASSWORD=root
 
-ARG COMPOSER_VERSION=1.9.3
-
 RUN apk add -U --no-cache \
         php7-pear \
         openssh \
         supervisor \
         autoconf \
         git \
+        git-flow\
         curl \
         wget \
         make \
