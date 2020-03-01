@@ -1,8 +1,7 @@
 # Alpine PHP 
 
 Repository of https://hub.docker.com/repository/docker/randef/alpine-php
-
-[![Build Status](https://travis-ci.org/randef/alpine-php.svg?branch=master)](https://travis-ci.org/randef/alpine-php) ![Docker Pulls](https://img.shields.io/docker/pulls/randef/alpine-php.svg?style=flat-square)
+[Docker Pulls](https://img.shields.io/docker/pulls/randef/alpine-php.svg?style=flat-square)
 
 Minimal PHP Docker images based on Alpine. Contains **tags** for development environments and adapted for various frameworks like [Symfony](http://symfony.com/) and [Wordpress](https://github.com/WordPress/WordPress).
 
