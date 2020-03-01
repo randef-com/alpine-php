@@ -78,7 +78,6 @@ RUN  apk add -U --no-cache \
         supervisor \
         autoconf \
         git \
-        git-flow\
         curl \
         wget \
         make \
