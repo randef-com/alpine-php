@@ -8,11 +8,11 @@ ENV COMPOSER_VERSION=1.9.3 \
     S6_VERSION=1.22.1.0 \
     PROJECT_ROOT='/var/www'
 
-RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz | tar xzf - -C / \
-    && apk --update add ca-certificates \
+RUN apk --update add ca-certificates \
     && echo "@cast https://dl.bintray.com/php-alpine/v3.10/php-7.4" >> /etc/apk/repositories \
     && apk add -U \
     # Packages
+    curl \
     php7@cast \
     php7-amqp@cast \
     php7-dev@cast \
@@ -52,6 +52,8 @@ RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v
     && ln -s /usr/bin/php7 /usr/bin/php \
     && rm -rf /var/cache/apk/*
 
+RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz | tar xzf - -C /
+
 # iconv hack https://github.com/docker-library/php/issues/240
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
@@ -70,7 +72,7 @@ FROM main as dev
 ARG USER=root
 ARG PASSWORD=root
 
-RUN apk add -U --no-cache \
+RUN  apk add -U --no-cache \
         php7-pear \
         openssh \
         supervisor \
